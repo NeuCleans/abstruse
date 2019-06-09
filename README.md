@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/1796022/41514005-9e827b86-72a3-11e8-9ca5-67736d9cab3e.png">
 </p>
 
-## Abstruse
+## Abstruse on Kubernetes
 
 [![AbstruseCI](https://ci.bleenco.io/badge/1)](https://ci.bleenco.io/repo/1)
 [![Slack](https://slackin-xxrlxvwnmd.now.sh/badge.svg)](https://join.slack.com/t/abstruse/shared_invite/enQtNDI0MzUxMTQ1OTExLTMyNGRiYjllMTQ4NjkzZDkwNDM4NGIwMGM2YjA5NjFmNzI3MzdkMWExYWRlNWQ1N2NjNzI4NDlhOTFmNGM5ZTM)
