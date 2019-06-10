@@ -25,7 +25,8 @@ COPY src /app/src
 
 RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sqlite git \
   && npm set progress=false && npm config set depth 0 \
-  && npm install \
+  && npm install --only=production \
+  && npm install --save-dev webpack \
   && cp -R node_modules prod_node_modules \
   && npm i && npm run build:prod && ls -lha /usr/lib/node_modules \
   && apk del .build-dependencies
