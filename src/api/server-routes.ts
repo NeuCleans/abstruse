@@ -135,7 +135,7 @@ export function jobRoutes(): express.Router {
   router.get('/:id/log', (req: express.Request, res: express.Response) => {
     getLastRun(req.params.id).then(jobRun => {
       if (jobRun && jobRun.log) {
-        let log = stripAnsi(jobRun.log.replace(/\r\n/g, '<br/>'));
+        let log = stripAnsi.default(jobRun.log.replace(/\r\n/g, '<br/>'));
         return res.status(200).type('html').send(log);
       } else {
         return res.status(404).json({ data: 'not found' });
