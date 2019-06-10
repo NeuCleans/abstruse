@@ -27,11 +27,8 @@ RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sq
 
 RUN npm set progress=false && npm config set depth 0
 RUN npm install --only=production
-RUN npm install --save-dev webpack
 RUN cp -R node_modules prod_node_modules
-RUN npm install --save-dev webpack
 RUN npm i
-RUN npm install -g webpack-cli webpack
 RUN npm run build:prod
 RUN ls -lha /usr/lib/node_modules
 RUN apk del .build-dependencies
