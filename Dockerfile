@@ -64,6 +64,7 @@ COPY --from=build /app/prod_node_modules /app/node_modules
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/src/files /app/src/files
 
+RUN npm install --save-dev webpack
 HEALTHCHECK --interval=10s --timeout=2s --start-period=20s \
   CMD wget -q -O- http://localhost:6500/status || exit 1
 
