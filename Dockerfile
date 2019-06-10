@@ -23,14 +23,17 @@ WORKDIR /app
 COPY package.json tsconfig.json webpack.*.js angular.json /app/
 COPY src /app/src
 
-RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sqlite git \
-  && npm set progress=false && npm config set depth 0 \
-  && npm install --only=production \
-  && npm install --save-dev webpack \
-  && cp -R node_modules prod_node_modules \
-  && npm install --save-dev webpack \
-  && npm i && npm run build:prod && ls -lha /usr/lib/node_modules \
-  && apk del .build-dependencies
+RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sqlite git
+
+RUN npm set progress=false && npm config set depth 0
+RUN npm install --only=production
+RUN npm install --save-dev webpack
+RUN cp -R node_modules prod_node_modules
+RUN npm install --save-dev webpack
+RUN npm i
+RUN npm run build:prod
+RUN ls -lha /usr/lib/node_modules
+RUN apk del .build-dependencies
 
 
 # Stage 3 image
