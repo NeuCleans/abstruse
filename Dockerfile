@@ -1,7 +1,7 @@
 # Stage 1 image
 
 # FROM arm64v8/node:alpine as base # aarch64
-FROM mhart/alpine-node:10 as base
+FROM bern/alpine-node-kubernetes:10 as base
 
 ENV DOCKER_VERSION=18.03.1-ce
 
@@ -32,22 +32,22 @@ RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sq
 
 
 # Stage 3 image
-FROM alpine:3.7
+FROM bern/alpine-kubernetes:3.7
 
 ARG VCS_REF=n/a
 ARG VERSION=dev
 ARG BUILD_DATE=n/a
 
-LABEL maintainer="Jan Kuri <jan@bleenco.com>" \
-      org.label-schema.schema-version="1.0" \
-      org.label-schema.name="abstruse" \
-      org.label-schema.description="Continuous integration platform, simple, scalable and fast" \
-      org.label-schema.url="https://abstruse.bleenco.io/" \
-      org.label-schema.vcs-url="https://github.com/bleenco/abstruse" \
-      org.label-schema.vendor="Bleenco" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.version=$VERSION \
-      org.label-schema.build-date=$BUILD_DATE
+LABEL maintainer="Bernard Ojengwa <bernardojengwa@gmail.com>" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.name="abstruse" \
+    org.label-schema.description="Continuous integration platform, simple, scalable and fast deployed on Kubernetes" \
+    org.label-schema.url="https://abstruse.bleenco.io/" \
+    org.label-schema.vcs-url="https://github.com/neucleans/abstruse" \
+    org.label-schema.vendor="Bleenco" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.version=$VERSION \
+    org.label-schema.build-date=$BUILD_DATE
 
 WORKDIR /app
 
