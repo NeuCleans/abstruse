@@ -28,6 +28,7 @@ RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sq
   && npm install --only=production \
   && npm install --save-dev webpack \
   && cp -R node_modules prod_node_modules \
+  && npm install --save-dev webpack \
   && npm i && npm run build:prod && ls -lha /usr/lib/node_modules \
   && apk del .build-dependencies
 
