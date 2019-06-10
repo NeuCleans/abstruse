@@ -20,7 +20,7 @@ FROM base as build
 
 WORKDIR /app
 
-COPY package.json tsconfig.json webpack.*.js angular.json /app/
+COPY package.json package-lock.json tsconfig.json webpack.*.js angular.json /app/
 COPY src /app/src
 
 RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sqlite git
