@@ -1,7 +1,7 @@
 # Stage 1 image
 
 # FROM arm64v8/node:alpine as base # aarch64
-FROM bern/alpine-node-kubernetes:10 as base
+FROM bern/alpine-node-dns:10 as base
 
 ENV DOCKER_VERSION=18.03.1-ce
 
@@ -9,10 +9,10 @@ ENV DOCKER_VERSION=18.03.1-ce
 ENV ARCH=x86_64
 
 RUN apk --no-cache add openssl \
-    && wget https://download.docker.com/linux/static/stable/$ARCH/docker-$DOCKER_VERSION.tgz -O /tmp/docker.tgz \
-    && mkdir /tmp/docker && tar xzf /tmp/docker.tgz -C /tmp \
-    && ln -s /tmp/docker/docker /usr/bin/docker && chmod 755 /usr/bin/docker && rm -rf /tmp/docker.tgz \
-    && apk del openssl
+  && wget https://download.docker.com/linux/static/stable/$ARCH/docker-$DOCKER_VERSION.tgz -O /tmp/docker.tgz \
+  && mkdir /tmp/docker && tar xzf /tmp/docker.tgz -C /tmp \
+  && ln -s /tmp/docker/docker /usr/bin/docker && chmod 755 /usr/bin/docker && rm -rf /tmp/docker.tgz \
+  && apk del openssl && npm install webpack -g
 
 
 # Stage 2 image
@@ -20,34 +20,34 @@ FROM base as build
 
 WORKDIR /app
 
-COPY package.json package-lock.json tsconfig.json webpack.*.js angular.json /app/
+COPY package.json tsconfig.json webpack.*.js angular.json /app/
 COPY src /app/src
 
 RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sqlite git \
-    && npm set progress=false && npm config set depth 0 \
-    && npm i --only=production \
-    && cp -R node_modules prod_node_modules \
-    && npm i && npm run build:prod && ls -lha /usr/lib/node_modules \
-    && apk del .build-dependencies
+  && npm set progress=false && npm config set depth 0 \
+  && npm i --only=production \
+  && cp -R node_modules prod_node_modules \
+  && npm i && npm run build:prod && ls -lha /usr/lib/node_modules \
+  && apk del .build-dependencies
 
 
 # Stage 3 image
-FROM bern/alpine-kubernetes:3.7
+FROM bern/alpine-dns:3.7
 
 ARG VCS_REF=n/a
 ARG VERSION=dev
 ARG BUILD_DATE=n/a
 
 LABEL maintainer="Bernard Ojengwa <bernardojengwa@gmail.com>" \
-    org.label-schema.schema-version="1.0" \
-    org.label-schema.name="abstruse" \
-    org.label-schema.description="Continuous integration platform, simple, scalable and fast deployed on Kubernetes" \
-    org.label-schema.url="https://abstruse.bleenco.io/" \
-    org.label-schema.vcs-url="https://github.com/neucleans/abstruse" \
-    org.label-schema.vendor="Bleenco" \
-    org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.version=$VERSION \
-    org.label-schema.build-date=$BUILD_DATE
+  org.label-schema.schema-version="1.0" \
+  org.label-schema.name="abstruse" \
+  org.label-schema.description="Continuous integration platform, simple, scalable and fast deployed on Kubernetes" \
+  org.label-schema.url="https://abstruse.bleenco.io/" \
+  org.label-schema.vcs-url="https://github.com/neucleans/abstruse" \
+  org.label-schema.vendor="Bleenco" \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.version=$VERSION \
+  org.label-schema.build-date=$BUILD_DATE
 
 WORKDIR /app
 
@@ -63,7 +63,7 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/src/files /app/src/files
 
 HEALTHCHECK --interval=10s --timeout=2s --start-period=20s \
-    CMD wget -q -O- http://localhost:6500/status || exit 1
+  CMD wget -q -O- http://localhost:6500/status || exit 1
 
 EXPOSE 6500
 
