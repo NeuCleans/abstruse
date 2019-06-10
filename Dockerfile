@@ -28,7 +28,7 @@ RUN apk add --no-cache --virtual .build-dependencies make gcc g++ python curl sq
 RUN npm set progress=false && npm config set depth 0
 RUN npm install --only=production
 RUN cp -R node_modules prod_node_modules
-RUN npm i
+RUN npm install
 RUN npm run build:prod
 RUN ls -lha /usr/lib/node_modules
 RUN apk del .build-dependencies
